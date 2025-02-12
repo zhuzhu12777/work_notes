@@ -1,0 +1,44 @@
+
+# ContrastEnhancement
+
+## FRM_AVG
+计算图像平均亮度值
+Y = (1228 * R + 2402 * G + 466 * B) / 4096
+avg = Y_sum / INTENSITY_SELECT
+
+## CONTRAST_RGB_GAIN
+根据上一帧Vblank产生的增益曲线（PREVIOUS_FINAL_CURVE）计算增益
+r_gain / g_gain / b_gain
+
+## CURVE_CALC
+更新PREVIOUS_FINAL_CURVE曲线，包括CONTENT_TARGET_CURVE，LENH_CURVE，TEMPORAL_FILTER
+
+### CONTENT_TARGET_CURVE
+LOW_HISTOGRAM_CURVE / HIGH_HISTOGRAM_CURVE 插值得到
+
+### LENH_CURVE
+
+### TEMPORAL_FILTER
+
+## HISTOGRAM_CURVE_UPDATE
+always @(posedge HVCLK or negedge HV_RSTB)
+begin
+    if(!HV_RSTB)
+        HISTOGRAM_CURVE_UPDATE_D <= 1'b0;
+    else if(VS_IN)
+        HISTOGRAM_CURVE_UPDATE_D <= 1'b0;
+    else if(HISTOGRAM_CURVE_UPDATE_V) 
+        HISTOGRAM_CURVE_UPDATE_D <= 1'b1;
+end
+
+always@(*)
+begin
+    HISTOGRAM_CURVE_UPDATE_SW = HISTOGRAM_CURVE_UPDATE_D & VS_IN;
+end
+
+当VS_IN和HISTOGRAM_CURVE_UPDATE_V在同一个时钟触发，不会update？？？
+
+# EdgeEnhancement
+
+## EDGE_SEARCH_GAIN
+

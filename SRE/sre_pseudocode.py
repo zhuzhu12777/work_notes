@@ -3,15 +3,6 @@
 
 
 def ContrastEnhancement():
-    # 计算图像平均亮度值
-    for vcnt in range(VACTIVE):
-        for hcnt in range(HACTIVE):
-            count_y = ((1228 * idx_r + 2402 * idx_g + 466 * idx_b) >> 12)       #YUV_Y
-            Dividend = Dividend + count_y
-            if Dividend >= INTENSITY_SELECT:
-                Quotient += 1
-                Dividend = Dividend - INTENSITY_SELECT
-
     # 根据上一帧Vblank产生的增益曲线（PREVIOUS_FINAL_CURVE）应用到当前帧
     for vcnt in range(VACTIVE):
         for hcnt in range(HACTIVE):
@@ -36,13 +27,23 @@ def ContrastEnhancement():
                     pixel_out = pixel_in
                 else:
                     pixel_out = result_r3
-    
+
+    # 计算图像平均亮度值
+    for vcnt in range(VACTIVE):
+        for hcnt in range(HACTIVE):
+            count_y = ((1228 * pixel_r + 2402 * pixel_g + 466 * pixel_b) >> 12)       #YUV_Y
+            Dividend = Dividend + count_y
+            if Dividend >= INTENSITY_SELECT:
+                Quotient += 1
+                Dividend = Dividend - INTENSITY_SELECT
+
     # 保存当前帧增益曲线到PREVIOUS_FINAL_CURVE
     CURRENT_TEMPORAL_TARGET = Quotient>>2
     if abs(FIRST_TEMPORAL_TARGET - CURRENT_TEMPORAL_TARGET) <= TMP_CYCLE_THRESHOLD:     # 两帧之间增益变化小于阈值, 不更新PREVIOUS_FINAL_CURVE
         CURRENT_TEMPORAL_TARGET = FIRST_TEMPORAL_TARGET
     else:   # 两帧之间增益变化大于阈值, 更新PREVIOUS_FINAL_CURVE, 重置TEMPORAL_COUNTER
         TEMPORAL_COUNTER = 0
+    if TEMPORAL_COUNTER == 0:   # 两帧之间增益变化大于阈值或COUNTER溢出
         FIRST_TEMPORAL_TARGET = CURRENT_TEMPORAL_TARGET
 
     # VBlanking area
