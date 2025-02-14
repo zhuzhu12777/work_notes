@@ -42,3 +42,21 @@ end
 
 ## EDGE_SEARCH_GAIN
 
+## EDGE_LBUF_TOP
+一个时钟两个像素pack成一个时钟四个像素，DE间隔分开，然后奇数时钟写入数据，偶数时钟读出数据，然后再将读出的像素值unpack成一个时钟两个像素，这样就能使用四块SPRAM进行5x5的卷积。
+
+## EDGE_FILTER_OP
+
+### EDGE_FILTER_TEMP
+rgb_max RATIO
+
+### EDGE_SORT
+find the max and min value of 5 data
+
+### EDGE_FILTER_SAT
+rgb_sat = 256 * (rgb_max - rgb_min) / rgb_max
+
+### EDGE_FILTER_BLUR
+Y_blur += Y_temp * UNSHARP_MASK[m][n]
+
+## RGB_ENH_TOP
