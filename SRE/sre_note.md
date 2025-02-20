@@ -60,3 +60,19 @@ rgb_sat = 256 * (rgb_max - rgb_min) / rgb_max
 Y_blur += Y_temp * UNSHARP_MASK[m][n]
 
 ## RGB_ENH_TOP
+
+
+
+# DIEDOP II
+DIE: Dynamic Image Enhancement
+DOP: Daylight Optimization
+
+# LUT
+GAIN[64]
+UNSHARP_MASK[25]
+HIGH_HISTOGRAM_CURVE[128]
+LOW_HISTOGRAM_CURVE[128]
+CONTENT_RATIO[33]
+LENH_RATIO[64]
+TEMPORAL_FILTER[32]
+
